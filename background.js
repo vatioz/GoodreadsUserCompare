@@ -4,22 +4,29 @@
 // tODO publish to chrome store
 // TODO write to goodreads discussion
 
-
-
 var compatibilityUrlBase = "https://www.goodreads.com/book/compatibility_results?id=";
 var compareUrlBase = "https://www.goodreads.com/user/compare/";
 
 var re = /\d{1,3}%/;
 var userCache = {}
 
+function setLinks(links, userData) {
+    countProcessed++;
+    progress.setContent('Processed ' +countProcessed+ ' from ' + countAll)
+        .delay(5)
+        .push('Processed ' +countProcessed+ ' from ' + countAll);
 
-function setLinks(links, userData) {    
     links.forEach(link => {
         setLink(link, userData);
     });
 }
 
-function setLinksError(links, error) {    
+function setLinksError(links, error) {
+    countProcessed++;
+    progress.setContent('Processed ' +countProcessed+ ' from ' + countAll)
+        .delay(5)
+        .push('Processed ' +countProcessed+ ' from ' + countAll);
+    
     links.forEach(link => {
         setLinkError(link, error);
     });
@@ -31,8 +38,11 @@ function setLink(link, userData) {
     var compareUrl = compareUrlBase + userData.id;
     var compatibilityUrl = compatibilityUrlBase + userData.id;
     link
-        .after("<a href='"+compatibilityUrl+"'> [Compatibility: "+userData.compatibility+"]</a>")
-        .after("<a href='"+compareUrl+"'> [Tastes: "+userData.comparison+"] </a>");
+        .after("<a class='goodTooltip' title='test!' href='"+compatibilityUrl+"'> [Compatibility: "+userData.compatibility+"]</a>")
+        .after("<a class='goodTooltip' title='test!' href='"+compareUrl+"'> [Tastes: "+userData.comparison+"] </a>");
+
+        tippy(".goodTooltip");
+
 }
 
 function setLinkError(link, error) {    
@@ -49,7 +59,7 @@ function processCompatibilityData(userData, compatibilityData) {
             userData.compatibility = compatibility;
             setLinks(userData.links, userData);
         } else {
-            setLinksError(userData.links, div[0].innerText);
+            setLinksError(userData.links, div.text());
         }
     } else { 
         // some error                    
@@ -73,7 +83,7 @@ function processCompareData(userData, compareData){
                 processCompatibilityData(this, compatibilityData);
             });
         } else {
-            setLinksError(userData.links, div[0].innerText);
+            setLinksError(userData.links, para.text());
         }
     } else {
         // probably private
@@ -116,11 +126,17 @@ $("a.userName").each(function (){
 });
 
 // this works on people page
-debugger;
 $("table.tableList tr td:nth-child(3) a:nth-child(1)").each(function (){
     var link = $(this);    
     cacheThisUser(link);
 });
+
+var countAll = Object.keys(userCache).length;
+var countProcessed = 0;
+
+alertify.set('notifier','position', 'top-right');
+var progress = alertify.message('Spotted '+ countAll +' users on page. Processing starts now. ');
+progress.delay(10);
 
 for(var userId in userCache) {
     var userData = userCache[userId];
