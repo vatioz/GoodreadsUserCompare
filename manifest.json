@@ -10,7 +10,7 @@
     },
     "content_scripts": [{
         "js": ["jquery-3.3.1.min.js", "tippy.all.min.js", "alertify.min.js", "background.js"],
-        "css": [ "css/alertify.min.css", "css/opentip.css", "css/themes/default.css" ],
+        "css": [ "css/alertify.min.css", "css/themes/default.css" ],
         "matches": [ "https://www.goodreads.com/","https://www.goodreads.com/*/*"]
     }],
     "permissions": [
