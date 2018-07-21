@@ -1,16 +1,12 @@
 {
     "manifest_version": 2,
-    "name": "GoodreadsCompareBooks",
+    "name": "Goodreads Compare Books",
     "description": "description",
     "version": "0.1",
-    "author": "Petr Kubát",
-    "browser_action": {
-        
-        "default_title": "Compare Books"
-    },
+    "author": "Petr Kubát",    
     "content_scripts": [{
         "js": ["jquery-3.3.1.min.js", "tippy.all.min.js", "alertify.min.js", "background.js"],
-        "css": [ "css/alertify.min.css", "css/themes/default.css" ],
+        "css": [ "css/alertify.min.css", "css/themes/default.min.css" ],
         "matches": [ "https://www.goodreads.com/","https://www.goodreads.com/*/*"]
     }],
     "permissions": [
