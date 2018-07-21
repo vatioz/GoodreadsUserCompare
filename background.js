@@ -1,5 +1,3 @@
-// TODO use colours to highlight better matches
-// tODO publish to chrome store
 // TODO write to goodreads discussion
 
 var compatibilityUrlBase = "https://www.goodreads.com/book/compatibility_results?id=";
