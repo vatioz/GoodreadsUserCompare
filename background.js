@@ -1,4 +1,3 @@
-// TODO write to goodreads discussion
 
 var compatibilityUrlBase = "https://www.goodreads.com/book/compatibility_results?id=";
 var compareUrlBase = "https://www.goodreads.com/user/compare/";
