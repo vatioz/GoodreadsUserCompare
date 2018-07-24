@@ -1,8 +1,8 @@
 {
     "manifest_version": 2,
     "name": "Goodreads Compare Books",
-    "description": "description",
-    "version": "0.1",
+    "description": "Adding info about similarity of user's tastes on Goodreads site.",
+    "version": "0.2",
     "author": "Petr Kubát",    
     "content_scripts": [{
         "js": ["jquery-3.3.1.min.js", "tippy.all.min.js", "alertify.min.js", "background.js"],
