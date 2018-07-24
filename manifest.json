@@ -18,7 +18,14 @@
         "css/*"
     ],
     "browser_action": {
+        "default_icon": {
+            "19": "icons/icon_19.png",
+            "38": "icons/icon_38.png"
+          },
         "default_title": "Goodreads Compare Books",      
         "default_popup": "html/popup.html"    
-    }
+    },
+    "icons": { "16": "icons/icon_16.png",
+        "48": "icons/icon_48.png",
+       "128": "icons/icon_128.png" }
 }
