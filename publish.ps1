@@ -9,7 +9,8 @@ $excludes = @(
     ".github",
     ".releases",
     "screenshots",
-    ".gitignore"
+    ".gitignore",
+    "publish.ps1"
 )
 $filesToPack = Get-ChildItem -Path $repo -Exclude $excludes
 Compress-Archive -Path $filesToPack -DestinationPath $releaseFullPath
