@@ -4,30 +4,33 @@
 
 function progressNotifications() {
     var chb = document.getElementById('chbProgressNotifications');
-    saveProgressNotifications(chb.checked);
+    saveSetting("progressNotifications", chb.checked);
 }
 
 function saveProgressNotifications(checked) {
     chrome.storage.sync.set({
         progressNotifications: checked
       }, function() {
-        // Update status to let user know options were saved.
-        var status = document.getElementById('status');
-        status.textContent = 'Options saved.';
-        setTimeout(function() {
-          status.textContent = '';
-        }, 750);
+        setStatus("Configuration saved");
       });
 }
 
 function restore_options() {
-    var status = document.getElementById('status');
-    status.textContent = 'Restoring';
     chrome.storage.sync.get({
-        progressNotifications: true
+    progressNotifications: true,
+    highTH: "75",
+    lowTH: "40",
+    highTHColor: "#32b849",
+    midTHColor: "#ff9f0f",
+    lowTHColor: "#ff2025" 
     }, function(items) {
-        status.textContent = 'Restored';
-      document.getElementById('chbProgressNotifications').checked = items.progressNotifications;      
+      document.getElementById('tbxHighTH').value = items.highTH;
+      document.getElementById('tbxLowTH').value = items.lowTH;
+      document.getElementById('clrHighTH').value = items.highTHColor;
+      document.getElementById('clrMidTH').value = items.midTHColor;
+      document.getElementById('clrLowTH').value = items.lowTHColor;
+      document.getElementById('chbProgressNotifications').checked = items.progressNotifications;
+      setStatus("Configuration restored");
     });
   }
 
@@ -35,12 +38,49 @@ function restore_options() {
 
 
 
-function test() {
-  
+function setStatus(message) {  
   var status = document.getElementById('status');
-  status.textContent = 'Loaded';
+  status.textContent = message;
   setTimeout(function() {
     status.textContent = '';
-  }, 750);
+  }, 1500);
 }
-  //document.getElementById('chbProgressNotifications').addEventListener('change', progressNotifications);
+
+function setHighTH(){
+  var tbx = document.getElementById('tbxHighTH');
+  saveSetting("highTH", tbx.value);
+}
+
+function setLowTH(){
+  var tbx = document.getElementById('tbxLowTH');
+  saveSetting("lowTH", tbx.value);
+}
+
+function setLowTHColor(){
+  var clr = document.getElementById('clrLowTH');
+  saveSetting("lowTHColor", clr.value);
+}
+
+function setMidTHColor(){
+  var clr = document.getElementById('clrMidTH');
+  saveSetting("midTHColor", clr.value);
+}
+
+function setHighTHColor(){
+  var clr = document.getElementById('clrHighTH');
+  saveSetting("highTHColor", clr.value);
+}
+
+
+
+function saveSetting(settingKey, value) {
+
+  var toSave = {};
+  toSave[settingKey] = value;
+
+  chrome.storage.sync.set(
+    toSave
+    , function() {
+    setStatus("Configuration saved");
+  });
+}

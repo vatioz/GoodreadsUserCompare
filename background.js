@@ -6,14 +6,34 @@ var reComparison = /\d{1,3}/;
 var reCommon = / \d{1,3} /;
 var userCache = new Map()
 
+var config = {};
+
+alertify.set('notifier','position', 'top-right');
+var progress = alertify.notify('Init','message', 0);
+progress.dismiss();
+loadConfig();
 
 
+function loadConfig() {
+    chrome.storage.sync.get({
+        progressNotifications: true,
+        highTH: "75",
+        lowTH: "40",
+        highTHColor: "#32b849",
+        midTHColor: "#ff9f0f",
+        lowTHColor: "#ff2025" 
+    }, function(items) {
+        config = items;
+    });
+}
 
 function setLinks(userData) {
     countProcessed++;
-    progress.setContent('Processed ' +countProcessed+ ' from ' + countAll)
-        .delay(5)
-        .push('Processed ' +countProcessed+ ' from ' + countAll);
+    if(config.progressNotifications) {
+        progress.setContent('Processed ' +countProcessed+ ' from ' + countAll)
+            .delay(5)
+            .push('Processed ' +countProcessed+ ' from ' + countAll);
+    }
 
     userData.links.forEach(link => {
         setLink(link, userData);
@@ -22,57 +42,39 @@ function setLinks(userData) {
 
 function setLinksError(links, error) {
     countProcessed++;
-    progress.setContent('Processed ' +countProcessed+ ' from ' + countAll)
-        .delay(5)
-        .push('Processed ' +countProcessed+ ' from ' + countAll);
-    
+    if(config.progressNotifications) {
+        progress.setContent('Processed ' +countProcessed+ ' from ' + countAll)
+            .delay(5)
+            .push('Processed ' +countProcessed+ ' from ' + countAll);
+    }
     links.forEach(link => {
         setLinkError(link, error);
     });
 }
 
 function setLink(link, userData) {    
-    //var userName = link.text();
-    //link.text(userName + " (Tastes: "+ comparison +", Compatibility: " + compatibility + ")");
     var compareUrl = compareUrlBase + userData.id;
-    var compatibilityUrl = compatibilityUrlBase + userData.id;
     var comparison = Number(userData.comparison);
-    var style = "style='color:red;'"
-    if(comparison > 50) {
-        style = "style='color:lightgreen;'"
+    var style = "style='color:black;'"
+
+    if(comparison > config.highTH) { // good match
+        style = "style='color:"+ config.highTHColor +";'"
+    } else if(comparison < config.lowTH) { // poor match
+        style = "style='color:"+ config.lowTHColor +";'"
+    } else { // middle
+        style = "style='color:"+ config.midTHColor +";'"
     }
 
     var tooltip = userData.comparisonText + "\n" + userData.booksInCommonText;
 
-    link
-        //.after("<a class='goodTooltip' title='test!' href='"+compatibilityUrl+"'> [Compatibility: "+userData.compatibility+"]</a>")
-        .after("<a class='goodTooltip' "+style+" title='"+tooltip+"' href='"+compareUrl+"'> ["+userData.comparison+"% / "+userData.booksInCommon+"] </a>");
-
+    link.after("<a class='goodTooltip' "+style+" title='"+tooltip+"' href='"+compareUrl+"'> ["+userData.comparison+"% / "+userData.booksInCommon+"] </a>");
         
     tippy(".goodTooltip");
-
 }
 
 function setLinkError(link, error) {    
     var userName = link.text();
     link.text(userName + " (" + error + ")");
-}
-
-function processCompatibilityData(userData, compatibilityData) {
-    var div = $("div.leftContainer>div.mediumText>div",compatibilityData);    
-    if(div.length !== 0) {
-        var match = div[0].innerText.match(reComparison);
-        if(match !== null) {
-            var compatibility = match[0];
-            userData.compatibility = compatibility;
-            setLinks(userData.links, userData);
-        } else {
-            setLinksError(userData.links, div.text());
-        }
-    } else { 
-        // some error                    
-        setLinksError(userData.links, "X1");
-    }
 }
 
 function processCompareData(userData, compareData){
@@ -83,17 +85,7 @@ function processCompareData(userData, compareData){
         if(matchComparison !== null) {
             var comparison = matchComparison[0];
             userData.comparison = comparison;
-            userData.comparisonText = para[0].innerText;
-            
-            /*
-            var compatibilityUrl =  compatibilityUrlBase + userData.id;
-            $.ajax({
-                url: compatibilityUrl, 
-                context: userData
-            }).done(function(compatibilityData) {
-                processCompatibilityData(this, compatibilityData);
-            });
-            */
+            userData.comparisonText = para[0].innerText;            
         } else {
             setLinksError(userData.links, para.text());
         }
@@ -129,8 +121,7 @@ function cacheThisUser(link) {
         var userData = { 
             id: userId, 
             links: [], 
-            comparison: '', 
-            compatibility: '', 
+            comparison: '',
             comparisonText: '', 
             booksInCommon: '',
             booksInCommonText: '' 
@@ -168,12 +159,12 @@ $("table.tableList tr td:nth-child(3) a:nth-child(1)").each(function (){
 var countAll = userCache.size;
 var countProcessed = 0;
 
-alertify.set('notifier','position', 'top-right');
-var progress = alertify.message('Spotted '+ countAll +' users on page. Processing starts now. ');
-progress.delay(10);
 
-for (var [key, value] of userCache) {
-//for(var userId in userCache) {
+if(config.progressNotifications) {    
+    progress.delay(5).push('Spotted '+ countAll +' users on page. Processing starts now. ');
+}
+
+for (var [key, value] of userCache) {    
     var userId = key;
     var userData = value;
     var compareUrl = compareUrlBase + userId;
@@ -184,7 +175,3 @@ for (var [key, value] of userCache) {
         processCompareData(this, compareData);        
     });
 }
-
-
-
-

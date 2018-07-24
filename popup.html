@@ -1,21 +1,92 @@
 <!doctype html>
-  <head>
+  <head>      
+      <link rel="stylesheet" href="css/bootstrap.min.css" />
     <title>Set Page Color Popup</title>
     <style>
-        body {
-            width: 100px;
-            margin: 10px;
-            padding: 10px;
-            background: white;
+        body {            
+            margin: 20px 20px 10px 20px;
+            min-width: 400px;
+        }        
+        div#status {            
+            margin:auto;
+            width: 50%;
+            text-align: center;
+            height: 30px;
         }
-
-	    	    
+        hr {            
+            /* margin-top: 50px; */
+        }
+        .form-group {
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        input[type=color].form-control {
+            padding: 3px;
+}
 	    </style>
 	    <script src="popup.js"></script>
 	  </head>
 	  <body>
-        Show progress in notifications: 
-        <input type="checkbox" id="chbProgressNotifications" onclick="progressNotifications();" /> <br />
+        <h5>Goodreads Compare Books configuration</h5>
+        <hr>
+        
+        <div class="form-group row">          
+            <label class="col-8 form-check-label" for="chbProgressNotifications">
+                Show progress in notifications:                
+            </label>            
+            <div class="col-4">
+                <input class="form-check-input" type="checkbox" id="chbProgressNotifications" onclick="progressNotifications();" />            
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-8 col-form-label" for="tbxHighTH">
+                Threshold for high similarity:
+            </label>
+            <div class="col-4">
+                <input class="form-control" id="tbxHighTH" type="number" min="51" max="99" onchange="setHighTH();" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-8 col-form-label" for="tbxLowTH">
+                Threshold for low similarity:
+            </label>
+            <div class="col-4">
+                <input class="form-control" id="tbxLowTH" type="number" min="1" max="50" onchange="setLowTH();" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-8 col-form-label" for="clrHighTH">
+                Colour for high similarity:
+            </label>
+            <div class="col-4">
+                <input class="form-control" id="clrHighTH" type="color" onchange="setHighTHColor();" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-8 col-form-label" for="clrMidTH">
+                Colour for high similarity:
+            </label>
+            <div class="col-4">
+                <input class="form-control" id="clrMidTH" type="color" onchange="setMidTHColor();" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-8 col-form-label" for="clrLowTH">
+                Colour for high similarity:
+            </label>
+            <div class="col-4">
+                <input class="form-control" id="clrLowTH" type="color" onchange="setLowTHColor();" />
+            </div>
+        </div>
+
+        <hr />
         <div id="status" >Default</div>
+
+
+
+
+        <script src="jquery-3.3.1.min.js" />
+        <script src="bootstrap.min.js" />
+
 	  </body>
 	</html>
