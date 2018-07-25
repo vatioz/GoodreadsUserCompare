@@ -2,9 +2,9 @@
     "manifest_version": 2,
     "name": "Goodreads Compare Books",
     "description": "Adding info about similarity of user's tastes on Goodreads site.",
-    "version": "0.3",
+    "version": "0.4",
     "author": "Petr Kubát",    
-    "content_scripts": [{
+    "content_scripts": [{        
         "js": ["js/jquery-3.3.1.min.js", "js/tippy.all.min.js", "js/alertify.min.js", "js/background.js"],
         "css": [ "css/alertify.min.css", "css/themes/default.min.css" ],
         "matches": [ "https://www.goodreads.com/","https://www.goodreads.com/*/*"]
@@ -23,9 +23,10 @@
             "38": "icons/icon_38.png"
           },
         "default_title": "Goodreads Compare Books",      
-        "default_popup": "html/popup.html"    
+        "default_popup": "html/popup.html"
     },
     "icons": { "16": "icons/icon_16.png",
         "48": "icons/icon_48.png",
-       "128": "icons/icon_128.png" }
+       "128": "icons/icon_128.png" 
+    }    
 }

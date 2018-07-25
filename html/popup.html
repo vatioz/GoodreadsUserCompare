@@ -1,6 +1,6 @@
 <!doctype html>
   <head>      
-      <link rel="stylesheet" href="../css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../css/bootstrap.min.css" />      
     <title>Set Page Color Popup</title>
     <style>
         body {            
@@ -13,18 +13,14 @@
             text-align: center;
             height: 30px;
         }
-        hr {            
-            /* margin-top: 50px; */
-        }
         .form-group {
             margin-top: 0;
             margin-bottom: 5px;
         }
         input[type=color].form-control {
             padding: 3px;
-}
+        }
 	    </style>
-	    <script src="../js/popup.js"></script>
 	  </head>
 	  <body>
         <h5>Goodreads Compare Books configuration</h5>
@@ -56,7 +52,7 @@
         </div>
         <div class="form-group row">
             <label class="col-8 col-form-label" for="clrHighTH">
-                Colour for high similarity:
+                Color for high similarity:
             </label>
             <div class="col-4">
                 <input class="form-control" id="clrHighTH" type="color" onchange="setHighTHColor();" />
@@ -64,7 +60,7 @@
         </div>
         <div class="form-group row">
             <label class="col-8 col-form-label" for="clrMidTH">
-                Colour for high similarity:
+                Color for mid similarity:
             </label>
             <div class="col-4">
                 <input class="form-control" id="clrMidTH" type="color" onchange="setMidTHColor();" />
@@ -72,7 +68,7 @@
         </div>
         <div class="form-group row">
             <label class="col-8 col-form-label" for="clrLowTH">
-                Colour for high similarity:
+                Color for low similarity:
             </label>
             <div class="col-4">
                 <input class="form-control" id="clrLowTH" type="color" onchange="setLowTHColor();" />
@@ -82,11 +78,7 @@
         <hr />
         <div id="status" >Default</div>
 
-
-
-
-        <script src="jquery-3.3.1.min.js" />
-        <script src="bootstrap.min.js" />
+        <script src="../js/popup.js"></script>
 
 	  </body>
 	</html>

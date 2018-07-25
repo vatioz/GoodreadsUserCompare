@@ -1,21 +1,6 @@
 
-var compatibilityUrlBase = "https://www.goodreads.com/book/compatibility_results?id=";
-var compareUrlBase = "https://www.goodreads.com/user/compare/";
-
-var reComparison = /\d{1,3}/;
-var reCommon = / \d{1,3} /;
-var userCache = new Map()
-
-var config = {};
-
-alertify.set('notifier','position', 'top-right');
-var progress = alertify.notify('Init','message', 0);
-progress.dismiss();
-loadConfig();
-
-
 function loadConfig() {
-    chrome.storage.sync.get({
+    chrome.storage.local.get({
         progressNotifications: true,
         highTH: "75",
         lowTH: "40",
@@ -24,6 +9,7 @@ function loadConfig() {
         lowTHColor: "#ff2025" 
     }, function(items) {
         config = items;
+        startProcessing();
     });
 }
 
@@ -131,47 +117,64 @@ function cacheThisUser(link) {
     }
 }
 
+function startProcessing() {
+    // this works in discussions
+    $("span.commentAuthor a").each(function (){
+        var link = $(this);
+        cacheThisUser(link);
+    });
 
-// this works in discussions
-$("span.commentAuthor a").each(function (){
-    var link = $(this);
-    cacheThisUser(link);
-});
+    // this works on main page
+    $("a.gr-user__profileLink").each(function (){
+        var link = $(this);    
+        cacheThisUser(link);
+    });
 
-// this works on main page
-$("a.gr-user__profileLink").each(function (){
-    var link = $(this);    
-    cacheThisUser(link);
-});
+    // this works on group page
+    $("a.userName").each(function (){
+        var link = $(this);    
+        cacheThisUser(link);
+    });
 
-// this works on group page
-$("a.userName").each(function (){
-    var link = $(this);    
-    cacheThisUser(link);
-});
+    // this works on people page
+    $("table.tableList tr td:nth-child(3) a:nth-child(1)").each(function (){
+        var link = $(this);    
+        cacheThisUser(link);
+    });
 
-// this works on people page
-$("table.tableList tr td:nth-child(3) a:nth-child(1)").each(function (){
-    var link = $(this);    
-    cacheThisUser(link);
-});
+    countAll = userCache.size;
+    
+    if(config.progressNotifications) {    
+        progress.delay(5).push('Spotted '+ countAll +' users on page. Processing starts now. ');
+    }
+    
+    for (var [key, value] of userCache) {    
+        var userId = key;
+        var userData = value;
+        var compareUrl = compareUrlBase + userId;
+        $.ajax({
+            url: compareUrl, 
+            context: userData
+        }).done(function(compareData) {
+            processCompareData(this, compareData);        
+        });
+    }
 
-var countAll = userCache.size;
+}
+
+var compatibilityUrlBase = "https://www.goodreads.com/book/compatibility_results?id=";
+var compareUrlBase = "https://www.goodreads.com/user/compare/";
+var reComparison = /\d{1,3}/;
+var reCommon = / \d{1,3} /;
+var userCache = new Map()
+var config = {};
+var countAll = 0;
 var countProcessed = 0;
 
+alertify.set('notifier','position', 'top-right');
+var progress = alertify.notify('Init','message', 0);
+progress.dismiss();
 
-if(config.progressNotifications) {    
-    progress.delay(5).push('Spotted '+ countAll +' users on page. Processing starts now. ');
-}
+loadConfig();
 
-for (var [key, value] of userCache) {    
-    var userId = key;
-    var userData = value;
-    var compareUrl = compareUrlBase + userId;
-    $.ajax({
-        url: compareUrl, 
-        context: userData
-    }).done(function(compareData) {
-        processCompareData(this, compareData);        
-    });
-}
+

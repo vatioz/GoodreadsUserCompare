@@ -8,7 +8,7 @@ function progressNotifications() {
 }
 
 function saveProgressNotifications(checked) {
-    chrome.storage.sync.set({
+    chrome.storage.local.set({
         progressNotifications: checked
       }, function() {
         setStatus("Configuration saved");
@@ -16,7 +16,7 @@ function saveProgressNotifications(checked) {
 }
 
 function restore_options() {
-    chrome.storage.sync.get({
+    chrome.storage.local.get({
     progressNotifications: true,
     highTH: "75",
     lowTH: "40",
@@ -34,7 +34,12 @@ function restore_options() {
     });
   }
 
-  document.addEventListener('DOMContentLoaded', restore_options);
+  document.addEventListener('DOMContentLoaded', domLoaded);
+
+
+  function domLoaded(){
+    restore_options();
+  }
 
 
 
@@ -78,7 +83,7 @@ function saveSetting(settingKey, value) {
   var toSave = {};
   toSave[settingKey] = value;
 
-  chrome.storage.sync.set(
+  chrome.storage.local.set(
     toSave
     , function() {
     setStatus("Configuration saved");
