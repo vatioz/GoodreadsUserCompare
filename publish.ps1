@@ -13,4 +13,4 @@ $excludes = @(
     "publish.ps1"
 )
 $filesToPack = Get-ChildItem -Path $repo -Exclude $excludes
-Compress-Archive -Path $filesToPack -DestinationPath $releaseFullPath
+Compress-Archive -Path $filesToPack -DestinationPath $releaseFullPath -CompressionLevel NoCompression
