@@ -7,15 +7,16 @@
             margin: 20px 20px 10px 20px;
             min-width: 400px;
         }        
-        div#status {            
-            margin:auto;
-            width: 50%;
-            text-align: center;
-            height: 30px;
+        #status {           
+            text-align: right;
         }
         .form-group {
             margin-top: 0;
             margin-bottom: 5px;
+        }
+        .col-form-label {
+          padding-bottom: 0px;
+          padding-top: 0px;
         }
         input[type=color].form-control {
             padding: 3px;
@@ -24,38 +25,64 @@
 	  </head>
 	  <body>
         <h5>Goodreads Compare Books configuration</h5>
+
         <hr>
-        
+
         <div class="form-group row">          
             <label class="col-8 form-check-label" for="chbProgressNotifications">
                 Show progress in notifications:                
             </label>            
             <div class="col-4">
-                <input class="form-check-input" type="checkbox" id="chbProgressNotifications" onclick="progressNotifications();" />            
+                <input class="form-check-input" type="checkbox" id="chbProgressNotifications" />            
+            </div>
+        </div>
+        
+        <hr/>
+
+        <h6>High similarity thresholds:</h6>
+        <div class="form-group row">
+            <label class="col-8 col-form-label" for="minBooksHighTH">
+                Minimum # books in common:
+            </label>
+            <div class="col-4">
+                <input class="form-control" id="minBooksHighTH" type="number" min="15" />
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-8 col-form-label" for="tbxHighTH">
-                Threshold for high similarity:
+          <label class="col-8 col-form-label" for="tbxHighTH">
+            Minimum percent compatible:
+          </label>
+          <div class="col-4">
+              <input class="form-control" id="tbxHighTH" type="number" min="51" max="99" />
+          </div>
+      </div>
+
+      <hr>
+
+      <h6>Low similarity thresholds:</h6>
+        <div class="form-group row">
+            <label class="col-8 col-form-label" for="maxBooksLowTH">
+                Maximum # books in common:
             </label>
             <div class="col-4">
-                <input class="form-control" id="tbxHighTH" type="number" min="51" max="99" onchange="setHighTH();" />
+                <input class="form-control" id="maxBooksLowTH" type="number" max="15" />
             </div>
         </div>
         <div class="form-group row">
             <label class="col-8 col-form-label" for="tbxLowTH">
-                Threshold for low similarity:
+              Maximum percent compatible:
             </label>
             <div class="col-4">
-                <input class="form-control" id="tbxLowTH" type="number" min="1" max="50" onchange="setLowTH();" />
+                <input class="form-control" id="tbxLowTH" type="number" min="1" max="50" />
             </div>
         </div>
+        <hr>
         <div class="form-group row">
             <label class="col-8 col-form-label" for="clrHighTH">
                 Color for high similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="clrHighTH" type="color" onchange="setHighTHColor();" />
+                <input class="form-control" id="clrHighTH" type="color" />
             </div>
         </div>
         <div class="form-group row">
@@ -63,7 +90,7 @@
                 Color for mid similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="clrMidTH" type="color" onchange="setMidTHColor();" />
+                <input class="form-control" id="clrMidTH" type="color" />
             </div>
         </div>
         <div class="form-group row">
@@ -71,12 +98,21 @@
                 Color for low similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="clrLowTH" type="color" onchange="setLowTHColor();" />
+                <input class="form-control" id="clrLowTH" type="color" />
             </div>
         </div>
 
         <hr />
-        <div id="status" >Default</div>
+
+        <div class ="form-group row">
+          <div class="col-4">
+            <button id="reprocessButton">Reprocess</button>
+          </div>
+          <div class="col-8">
+              <div id="status" >Default</div>
+          </div>
+        </div>
+        
 
         <script src="../js/popup.js"></script>
 
