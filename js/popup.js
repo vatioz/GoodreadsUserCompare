@@ -6,12 +6,16 @@ function restore_options() {
   progressNotifications: true,
   highTH: "75",
   lowTH: "40",
+  minBooksHighTH: 15,
+  maxBooksLowTH: 5,
   highTHColor: "#32b849",
   midTHColor: "#ff9f0f",
   lowTHColor: "#ff2025" 
   }, function(items) {
     document.getElementById('tbxHighTH').value = items.highTH;
     document.getElementById('tbxLowTH').value = items.lowTH;
+    document.getElementById('minBooksHighTH').value = items.minBooksHighTH;
+    document.getElementById('maxBooksLowTH').value = items.maxBooksLowTH;
     document.getElementById('clrHighTH').value = items.highTHColor;
     document.getElementById('clrMidTH').value = items.midTHColor;
     document.getElementById('clrLowTH').value = items.lowTHColor;
@@ -26,6 +30,8 @@ function domLoaded(){
   restore_options();
   initializeSettingInput('change', 'tbxHighTH', 'value', 'highTH');
   initializeSettingInput('change', 'tbxLowTH', 'value', 'lowTH');
+  initializeSettingInput('change', 'minBooksHighTH', 'value', 'minBooksHighTH');
+  initializeSettingInput('change', 'maxBooksLowTH', 'value', 'maxBooksLowTH');
   initializeSettingInput('change', 'clrHighTH', 'value', 'highTHColor');
   initializeSettingInput('change', 'clrMidTH', 'value', 'midTHColor');
   initializeSettingInput('change', 'clrLowTH', 'value', 'lowTHColor');

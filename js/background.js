@@ -3,6 +3,8 @@ function loadConfig() {
       progressNotifications: true,
       highTH: "75",
       lowTH: "40",
+      minBooksHighTH: 15,
+      maxBooksLowTH: 5,
       highTHColor: "#32b849",
       midTHColor: "#ff9f0f",
       lowTHColor: "#ff2025" 
@@ -39,12 +41,13 @@ function setLinksError(links, error) {
 
 function setLink(link, userData) {    
   var compareUrl = compareUrlBase + userData.id;
+  var booksInCommon = Number(userData.booksInCommon);
   var comparison = Number(userData.comparison);
-  var style = "style='color:black;'"
+  var style = "style='color:black;'";
 
-  if(comparison > config.highTH) { // good match
+  if(comparison >= config.highTH && booksInCommon >= config.minBooksHighTH) { // good match
       style = "style='color:"+ config.highTHColor +";'"
-  } else if(comparison < config.lowTH) { // poor match
+  } else if(comparison <= config.lowTH || booksInCommon <= config.maxBooksLowTH) { // poor match
       style = "style='color:"+ config.lowTHColor +";'"
   } else { // middle
       style = "style='color:"+ config.midTHColor +";'"
@@ -52,7 +55,7 @@ function setLink(link, userData) {
 
   var tooltip = userData.comparisonText + "\n" + userData.booksInCommonText;
 
-  link.after("<a class='goodTooltip' "+style+" title='"+tooltip+"' href='"+compareUrl+"'> ["+userData.comparison+"% / "+userData.booksInCommon+"] </a>");
+  link.after("<a class='goodTooltip' "+style+" title='"+tooltip+"' href='"+compareUrl+"'> ["+userData.comparison+"% / "+booksInCommon+"] </a>");
       
   tippy(".goodTooltip");
 }
