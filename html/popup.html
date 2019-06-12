@@ -31,7 +31,7 @@
                 Show progress in notifications:                
             </label>            
             <div class="col-4">
-                <input class="form-check-input" type="checkbox" id="chbProgressNotifications" onclick="progressNotifications();" />            
+                <input class="form-check-input" type="checkbox" id="chbProgressNotifications" />            
             </div>
         </div>
         <div class="form-group row">
@@ -39,7 +39,7 @@
                 Threshold for high similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="tbxHighTH" type="number" min="51" max="99" onchange="setHighTH();" />
+                <input class="form-control" id="tbxHighTH" type="number" min="51" max="99" />
             </div>
         </div>
         <div class="form-group row">
@@ -47,7 +47,7 @@
                 Threshold for low similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="tbxLowTH" type="number" min="1" max="50" onchange="setLowTH();" />
+                <input class="form-control" id="tbxLowTH" type="number" min="1" max="50" />
             </div>
         </div>
         <div class="form-group row">
@@ -55,7 +55,7 @@
                 Color for high similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="clrHighTH" type="color" onchange="setHighTHColor();" />
+                <input class="form-control" id="clrHighTH" type="color" />
             </div>
         </div>
         <div class="form-group row">
@@ -63,7 +63,7 @@
                 Color for mid similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="clrMidTH" type="color" onchange="setMidTHColor();" />
+                <input class="form-control" id="clrMidTH" type="color" />
             </div>
         </div>
         <div class="form-group row">
@@ -71,9 +71,10 @@
                 Color for low similarity:
             </label>
             <div class="col-4">
-                <input class="form-control" id="clrLowTH" type="color" onchange="setLowTHColor();" />
+                <input class="form-control" id="clrLowTH" type="color" />
             </div>
         </div>
+        <button id="reprocessButton">Reprocess</button>
 
         <hr />
         <div id="status" >Default</div>
