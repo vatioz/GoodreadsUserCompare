@@ -1,82 +1,78 @@
 
 // TODO Set icon for browser action
 
-
-function progressNotifications() {
-    var chb = document.getElementById('chbProgressNotifications');
-    saveSetting("progressNotifications", chb.checked);
-}
-
-function saveProgressNotifications(checked) {
-    chrome.storage.local.set({
-        progressNotifications: checked
-      }, function() {
-        setStatus("Configuration saved");
-      });
-}
-
 function restore_options() {
-    chrome.storage.local.get({
-    progressNotifications: true,
-    highTH: "75",
-    lowTH: "40",
-    highTHColor: "#32b849",
-    midTHColor: "#ff9f0f",
-    lowTHColor: "#ff2025" 
-    }, function(items) {
-      document.getElementById('tbxHighTH').value = items.highTH;
-      document.getElementById('tbxLowTH').value = items.lowTH;
-      document.getElementById('clrHighTH').value = items.highTHColor;
-      document.getElementById('clrMidTH').value = items.midTHColor;
-      document.getElementById('clrLowTH').value = items.lowTHColor;
-      document.getElementById('chbProgressNotifications').checked = items.progressNotifications;
-      setStatus("Configuration restored");
-    });
-  }
+  chrome.storage.local.get({
+  progressNotifications: true,
+  highTH: "75",
+  lowTH: "40",
+  minBooksHighTH: 15,
+  maxBooksLowTH: 5,
+  highTHColor: "#32b849",
+  midTHColor: "#ff9f0f",
+  lowTHColor: "#ff2025" 
+  }, function(items) {
+    document.getElementById('tbxHighTH').value = items.highTH;
+    document.getElementById('tbxLowTH').value = items.lowTH;
+    document.getElementById('minBooksHighTH').value = items.minBooksHighTH;
+    document.getElementById('maxBooksLowTH').value = items.maxBooksLowTH;
+    document.getElementById('clrHighTH').value = items.highTHColor;
+    document.getElementById('clrMidTH').value = items.midTHColor;
+    document.getElementById('clrLowTH').value = items.lowTHColor;
+    document.getElementById('chbProgressNotifications').checked = items.progressNotifications;
+    setStatus("Configuration restored");
+  });
+}
 
-  document.addEventListener('DOMContentLoaded', domLoaded);
+document.addEventListener('DOMContentLoaded', domLoaded);
 
+function domLoaded(){
+  restore_options();
+  initializeSettingInput('change', 'tbxHighTH', 'value', 'highTH');
+  initializeSettingInput('change', 'tbxLowTH', 'value', 'lowTH');
+  initializeSettingInput('change', 'minBooksHighTH', 'value', 'minBooksHighTH');
+  initializeSettingInput('change', 'maxBooksLowTH', 'value', 'maxBooksLowTH');
+  initializeSettingInput('change', 'clrHighTH', 'value', 'highTHColor');
+  initializeSettingInput('change', 'clrMidTH', 'value', 'midTHColor');
+  initializeSettingInput('change', 'clrLowTH', 'value', 'lowTHColor');
+  initializeSettingInput('click', 'chbProgressNotifications', 'checked', 'progressNotifications');
+  initializeReprocessButton();
+}
 
-  function domLoaded(){
-    restore_options();
-  }
+function initializeSettingInput(event, elementId, inputValueKey, settingKey) {
+  var el = document.getElementById(elementId);
+  el.addEventListener(event, function() {
+    saveSetting(settingKey, el[inputValueKey]);
+  });
+};
 
-
+var timeout = null;
 
 function setStatus(message) {  
   var status = document.getElementById('status');
   status.textContent = message;
-  setTimeout(function() {
+
+  if (timeout) clearTimeout(timeout);
+  timeout = setTimeout(function() {
     status.textContent = '';
   }, 1500);
 }
 
-function setHighTH(){
-  var tbx = document.getElementById('tbxHighTH');
-  saveSetting("highTH", tbx.value);
+function initializeReprocessButton(){
+  var reprocessButton = document.getElementById('reprocessButton');  
+  reprocessButton.addEventListener('click', function() { 
+    sendReprocessMessage();
+    window.close();
+  });
 }
 
-function setLowTH(){
-  var tbx = document.getElementById('tbxLowTH');
-  saveSetting("lowTH", tbx.value);
+// useful for processing lazyloaded content (eg., book page reviews)
+function sendReprocessMessage() {
+  chrome.tabs.query({currentWindow: true, active: true}, function (tabs){
+    var activeTab = tabs[0];
+    chrome.tabs.sendMessage(activeTab.id, {"message": "reprocess"});
+  });
 }
-
-function setLowTHColor(){
-  var clr = document.getElementById('clrLowTH');
-  saveSetting("lowTHColor", clr.value);
-}
-
-function setMidTHColor(){
-  var clr = document.getElementById('clrMidTH');
-  saveSetting("midTHColor", clr.value);
-}
-
-function setHighTHColor(){
-  var clr = document.getElementById('clrHighTH');
-  saveSetting("highTHColor", clr.value);
-}
-
-
 
 function saveSetting(settingKey, value) {
 
