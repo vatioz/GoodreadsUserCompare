@@ -1,4 +1,4 @@
-$version = "v0.4"
+$version = "v0.5"
 $product = "GoodreadsCompareBooks"
 $repo = "D:\_sources\GoodreadsCompareBooks"
 $releaseDest = "{0}\{1}" -f $repo,".releases"
